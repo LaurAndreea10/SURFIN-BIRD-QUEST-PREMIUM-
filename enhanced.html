@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ro" data-theme="dark" data-motion="on">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Surfin' Bird Quest — Enhanced Edition</title>
+  <meta name="description" content="Enhanced version of Surfin' Bird Quest Premium: arcade restaurant quest with bilingual UI, accessibility controls, missions, achievements, XP, combos and mobile-first gameplay." />
+  <meta name="author" content="Laura Andreea" />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <meta name="theme-color" content="#06111f" />
+  <meta property="og:title" content="Surfin' Bird Quest — Enhanced Edition" />
+  <meta property="og:description" content="A premium arcade restaurant quest: serve beach orders, build combos, unlock badges and use accessibility-first controls." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://laurandreea10.github.io/SURFIN-BIRD-QUEST-PREMIUM-/enhanced.html" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href="https://laurandreea10.github.io/SURFIN-BIRD-QUEST-PREMIUM-/enhanced.html" />
+  <style>
+    :root{
+      --bg:#06111f;
+      --bg-2:#0b1d32;
+      --panel:rgba(13,31,55,.82);
+      --panel-2:rgba(10,22,40,.94);
+      --text:#eef8ff;
+      --muted:#9fc0da;
+      --line:rgba(151,211,255,.2);
+      --brand:#00d4ff;
+      --brand-2:#ffb000;
+      --good:#47ff9a;
+      --danger:#ff5d73;
+      --hot:#ff7b4f;
+      --violet:#b46cff;
+      --shadow:0 22px 70px rgba(0,0,0,.38);
+      --radius:28px;
+      --radius-sm:16px;
+      --focus:0 0 0 4px rgba(0,212,255,.32);
+    }
+    [data-theme="light"]{
+      --bg:#f7fbff;
+      --bg-2:#e6f3ff;
+      --panel:rgba(255,255,255,.86);
+      --panel-2:rgba(255,255,255,.95);
+      --text:#102033;
+      --muted:#52667a;
+      --line:rgba(20,50,80,.16);
+      --brand:#0077c8;
+      --brand-2:#b96500;
+      --good:#0b8d52;
+      --danger:#cc2746;
+      --hot:#d45220;
+      --violet:#7b3fd6;
+      --shadow:0 18px 52px rgba(24,58,95,.18);
+    }
+    [data-theme="contrast"]{
+      --bg:#000;
+      --bg-2:#000;
+      --panel:#050505;
+      --panel-2:#000;
+      --text:#fff;
+      --muted:#fff;
+      --line:#fff;
+      --brand:#00ffff;
+      --brand-2:#ffff00;
+      --good:#00ff00;
+      --danger:#ff3366;
+      --hot:#ff9900;
+      --violet:#ff66ff;
+      --shadow:none;
+      --focus:0 0 0 4px #fff;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      color:var(--text);
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(circle at 18% 12%,rgba(0,212,255,.24),transparent 34%),
+        radial-gradient(circle at 84% 0,rgba(255,176,0,.16),transparent 30%),
+        linear-gradient(135deg,var(--bg),var(--bg-2));
+      overflow-x:hidden;
+    }
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+      background-size:44px 44px;
+      mask-image:linear-gradient(to bottom,rgba(0,0,0,.9),transparent 86%);
+    }
+    button,input{font:inherit}
+    button{cursor:pointer}
+    a{color:inherit}
+    .skip-link{
+      position:fixed;
+      left:16px;
+      top:12px;
+      z-index:1000;
+      transform:translateY(-160%);
+      background:var(--brand-2);
+      color:#08101d;
+      padding:12px 16px;
+      border-radius:999px;
+      font-weight:900;
+      text-decoration:none;
+    }
+    .skip-link:focus{transform:translateY(0);outline:none;box-shadow:var(--focus)}
+    .shell{width:min(1160px,calc(100% - 28px));margin:0 auto;padding:22px 0 44px;position:relative;z-index:1}
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding:12px;
+      margin-bottom:18px;
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:999px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(18px);
+      position:sticky;
+      top:12px;
+      z-index:20;
+    }
+    .brand{display:flex;align-items:center;gap:10px;font-weight:1000;letter-spacing:.05em;text-transform:uppercase;padding-left:6px}
+    .brand-mark{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#06111f;box-shadow:0 0 30px rgba(0,212,255,.28)}
+    .top-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .chip,.control-btn,.primary-btn,.ghost-btn{
+      border:1px solid var(--line);
+      background:var(--panel-2);
+      color:var(--text);
+      border-radius:999px;
+      padding:10px 13px;
+      font-weight:900;
+      letter-spacing:.02em;
+      transition:transform .18s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease;
+    }
+    .control-btn:hover,.primary-btn:hover,.ghost-btn:hover,.chip:hover{transform:translateY(-2px);border-color:var(--brand)}
+    .control-btn:focus-visible,.primary-btn:focus-visible,.ghost-btn:focus-visible,.item-card:focus-visible,.order-card:focus-visible{outline:none;box-shadow:var(--focus)}
+    .hero{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    .hero-card,.panel{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(20px);
+    }
+    .hero-card{padding:28px;position:relative;overflow:hidden}
+    .hero-card::after{
+      content:"🐦";
+      position:absolute;
+      right:26px;
+      top:24px;
+      font-size:92px;
+      opacity:.16;
+      filter:drop-shadow(0 0 28px var(--brand));
+    }
+    .kicker{display:inline-flex;gap:8px;align-items:center;color:var(--brand-2);font-weight:1000;text-transform:uppercase;letter-spacing:.16em;font-size:.78rem}
+    h1{font-size:clamp(2.2rem,7vw,5rem);line-height:.92;margin:16px 0 14px;letter-spacing:-.08em;text-transform:uppercase}
+    .gradient-text{background:linear-gradient(90deg,var(--brand),var(--brand-2),var(--good));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .lead{font-size:clamp(1rem,2vw,1.18rem);line-height:1.75;color:var(--muted);max-width:68ch;margin:0 0 20px}
+    .cta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    .primary-btn{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#07111d;border:0;padding:13px 18px;text-transform:uppercase}
+    .ghost-btn{background:transparent;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+    .mini-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:22px}
+    .mini-stat{padding:14px;border:1px solid var(--line);background:rgba(255,255,255,.045);border-radius:20px}
+    .mini-stat strong{display:block;font-size:1.4rem;color:var(--brand-2)}
+    .mini-stat span{display:block;color:var(--muted);font-size:.82rem;margin-top:3px}
+    .side-card{padding:18px;display:grid;gap:12px}
+    .mission-card{padding:16px;border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.04)}
+    .mission-card h2,.mission-card h3{margin:0 0 8px;font-size:1rem}
+    .mission-card p{margin:0;color:var(--muted);line-height:1.6;font-size:.92rem}
+    .meter{height:12px;border-radius:999px;background:rgba(255,255,255,.1);overflow:hidden;border:1px solid var(--line);margin-top:12px}
+    .meter > span{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--brand),var(--good));transition:width .35s ease}
+    .game-layout{display:grid;grid-template-columns:.85fr 1.15fr;gap:18px;margin-top:18px;align-items:start}
+    .panel{padding:18px}
+    .section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+    .section-title h2{margin:0;font-size:1.08rem;text-transform:uppercase;letter-spacing:.08em}
+    .status{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+    .status-card{border:1px solid var(--line);background:rgba(255,255,255,.045);border-radius:18px;padding:12px;text-align:center}
+    .status-card strong{display:block;font-size:1.25rem;color:var(--brand-2)}
+    .status-card span{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+    .orders{display:grid;gap:10px;max-height:442px;overflow:auto;padding-right:4px}
+    .order-card{border:1px solid var(--line);background:rgba(255,255,255,.052);border-radius:20px;padding:13px;text-align:left;color:var(--text);width:100%}
+    .order-card.selected{border-color:var(--good);box-shadow:0 0 0 2px rgba(71,255,154,.18)}
+    .order-card.urgent{border-color:var(--danger)}
+    .order-head{display:flex;justify-content:space-between;gap:8px;align-items:start}
+    .order-name{font-weight:1000}.order-customer{color:var(--muted);font-size:.8rem;margin-top:2px}.order-points{color:var(--brand-2);font-weight:1000}
+    .recipe{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.recipe span{font-size:1.35rem;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:14px;padding:5px 8px}
+    .timebar{height:8px;border-radius:999px;background:rgba(255,255,255,.1);overflow:hidden}.timebar span{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--good),var(--brand-2),var(--danger))}
+    .kitchen-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+    .item-card{border:1px solid var(--line);background:rgba(255,255,255,.052);border-radius:18px;padding:13px 8px;color:var(--text);min-height:92px;display:grid;place-items:center;gap:4px}
+    .item-card .emoji{font-size:1.9rem}.item-card .label{font-size:.75rem;color:var(--muted);font-weight:900;text-transform:uppercase;text-align:center}
+    .tray{min-height:108px;border:1px dashed var(--line);border-radius:22px;background:rgba(255,255,255,.035);padding:12px;margin:14px 0;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .tray.empty{color:var(--muted)}.tray-item{font-size:1.85rem;border:1px solid var(--line);background:rgba(255,255,255,.06);border-radius:16px;padding:8px 10px}
+    .actions{display:flex;gap:10px;flex-wrap:wrap}.actions > *{flex:1;min-width:150px}
+    .powerups{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}.power{border:1px solid var(--line);background:rgba(255,255,255,.045);border-radius:18px;padding:12px;color:var(--text);text-align:center}.power:disabled{opacity:.45;cursor:not-allowed}.power strong{display:block;font-size:.78rem;margin-top:4px}.power span{display:block;color:var(--muted);font-size:.72rem;margin-top:2px}
+    .badges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.badge{border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.04);padding:12px;min-height:104px}.badge .icon{font-size:1.6rem;filter:grayscale(1);opacity:.55}.badge.unlocked{border-color:var(--brand-2)}.badge.unlocked .icon{filter:none;opacity:1}.badge strong{display:block;margin-top:6px;font-size:.82rem}.badge span{display:block;color:var(--muted);font-size:.72rem;margin-top:3px;line-height:1.35}
+    .toast-wrap{position:fixed;right:18px;bottom:18px;display:grid;gap:10px;z-index:90}.toast{background:var(--panel-2);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:18px;padding:12px 14px;color:var(--text);max-width:330px}.toast.good{border-color:var(--good)}.toast.bad{border-color:var(--danger)}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media (max-width:900px){.hero,.game-layout{grid-template-columns:1fr}.topbar{border-radius:24px;align-items:flex-start}.brand{padding-top:4px}.status{grid-template-columns:repeat(2,1fr)}.kitchen-grid{grid-template-columns:repeat(3,1fr)}.powerups,.badges,.mini-stats{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:560px){.shell{width:min(100% - 18px,1160px);padding-top:10px}.topbar{position:static;display:grid}.top-actions{justify-content:stretch}.top-actions > *{flex:1}.hero-card,.panel{padding:15px;border-radius:22px}h1{font-size:2.45rem}.orders{max-height:360px}.kitchen-grid{grid-template-columns:repeat(2,1fr)}.powerups,.badges{grid-template-columns:1fr}.mini-stats{grid-template-columns:1fr}.cta-row .primary-btn,.cta-row .ghost-btn{width:100%}}
+    @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+    [data-motion="off"] *,[data-motion="off"] *::before,[data-motion="off"] *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  </style>
+</head>
+<body>
+  <a href="#game" class="skip-link" data-i18n="skip">Sari la joc</a>
+  <div class="shell">
+    <header class="topbar" aria-label="Surfin Bird Quest controls">
+      <div class="brand" aria-label="Surfin Bird Quest Enhanced"><span class="brand-mark" aria-hidden="true">🐦</span><span>Surfin' Bird Quest</span></div>
+      <div class="top-actions">
+        <button class="control-btn" id="langBtn" type="button">EN</button>
+        <button class="control-btn" id="themeBtn" type="button" data-i18n="theme">Contrast</button>
+        <button class="control-btn" id="motionBtn" type="button" data-i18n="motion">Fără mișcare</button>
+        <a class="ghost-btn" href="index.html" data-i18n="classic">Versiune clasică</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="title">
+        <div class="hero-card">
+          <span class="kicker" data-i18n="kicker">May 2026 CodePen Challenge · Enhanced</span>
+          <h1 id="title"><span data-i18n="titleA">Surfin'</span> <span class="gradient-text">Bird</span> <span data-i18n="titleB">Quest</span></h1>
+          <p class="lead" data-i18n="lead">Servește comenzi pe plajă, construiește combo-uri, folosește power-up-uri și deblochează badge-uri într-o experiență arcade premium, accesibilă și mobile-first.</p>
+          <div class="cta-row">
+            <button class="primary-btn" id="startBtn" type="button" data-i18n="start">▶ Start quest</button>
+            <button class="ghost-btn" id="resetBtn" type="button" data-i18n="reset">Resetează progresul</button>
+          </div>
+          <div class="mini-stats" aria-label="Saved progress">
+            <div class="mini-stat"><strong id="bestScore">0</strong><span data-i18n="best">Best score</span></div>
+            <div class="mini-stat"><strong id="gamesPlayed">0</strong><span data-i18n="games">Games played</span></div>
+            <div class="mini-stat"><strong id="badgesCount">0/8</strong><span data-i18n="badges">Badges</span></div>
+          </div>
+        </div>
+        <aside class="panel side-card" aria-label="Experience features">
+          <div class="mission-card">
+            <h2 data-i18n="whyTitle">Ce este nou în Enhanced?</h2>
+            <p data-i18n="whyText">UI bilingv RO/EN, mod contrast, reducere animații, sistem XP, misiuni live, comenzi generate dinamic și salvare locală a progresului.</p>
+          </div>
+          <div class="mission-card">
+            <h3 data-i18n="xpTitle">Progression loop</h3>
+            <p data-i18n="xpText">Servește corect pentru XP. La fiecare nivel, jocul devine mai rapid și comenzile valorează mai mult.</p>
+            <div class="meter" aria-hidden="true"><span id="heroMeter"></span></div>
+          </div>
+          <div class="mission-card">
+            <h3 data-i18n="a11yTitle">Accessibility-first</h3>
+            <p data-i18n="a11yText">Butoane mari, focus vizibil, feedback textual, contrast ridicat și suport pentru preferința reduced motion.</p>
+          </div>
+        </aside>
+      </section>
+
+      <section class="game-layout" id="game" aria-label="Game area">
+        <aside class="panel" aria-labelledby="ordersTitle">
+          <div class="section-title"><h2 id="ordersTitle" data-i18n="orders">Comenzi</h2><span class="chip" id="phaseChip">Ready</span></div>
+          <div class="status">
+            <div class="status-card"><strong id="score">0</strong><span data-i18n="score">Scor</span></div>
+            <div class="status-card"><strong id="combo">x1</strong><span data-i18n="combo">Combo</span></div>
+            <div class="status-card"><strong id="level">1</strong><span data-i18n="level">Nivel</span></div>
+            <div class="status-card"><strong id="lives">❤❤❤</strong><span data-i18n="lives">Vieți</span></div>
+          </div>
+          <div class="meter" aria-label="XP progress"><span id="xpMeter"></span></div>
+          <div class="orders" id="ordersList" aria-live="polite"></div>
+        </aside>
+
+        <section class="panel" aria-labelledby="kitchenTitle">
+          <div class="section-title"><h2 id="kitchenTitle" data-i18n="kitchen">Bucătărie arcade</h2><span class="chip" id="timer">60s</span></div>
+          <div class="kitchen-grid" id="kitchenGrid"></div>
+          <div class="tray empty" id="tray" aria-live="polite" data-i18n="trayEmpty">Tava este goală. Alege ingredientele pentru comanda selectată.</div>
+          <div class="actions">
+            <button class="primary-btn" type="button" id="serveBtn" data-i18n="serve">Servește comanda</button>
+            <button class="ghost-btn" type="button" id="clearBtn" data-i18n="clear">Golește tava</button>
+          </div>
+          <div class="powerups" id="powerups"></div>
+        </section>
+      </section>
+
+      <section class="panel" style="margin-top:18px" aria-labelledby="badgesTitle">
+        <div class="section-title"><h2 id="badgesTitle" data-i18n="badgeTitle">Badge-uri & misiuni</h2><span class="chip" id="missionText">Serve 3 orders</span></div>
+        <div class="badges" id="badgesGrid"></div>
+      </section>
+    </main>
+  </div>
+  <div class="toast-wrap" id="toasts" aria-live="polite" aria-atomic="true"></div>
+
+  <script>
+    const $ = (s, r=document) => r.querySelector(s);
+    const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+    const STORE_KEY = 'sbq_enhanced_v1';
+    const root = document.documentElement;
+
+    const i18n = {
+      ro:{skip:'Sari la joc',theme:'Contrast',motion:'Fără mișcare',classic:'Versiune clasică',kicker:'May 2026 CodePen Challenge · Enhanced',titleA:"Surfin'",titleB:'Quest',lead:'Servește comenzi pe plajă, construiește combo-uri, folosește power-up-uri și deblochează badge-uri într-o experiență arcade premium, accesibilă și mobile-first.',start:'▶ Start quest',reset:'Resetează progresul',best:'Best score',games:'Jocuri',badges:'Badge-uri',whyTitle:'Ce este nou în Enhanced?',whyText:'UI bilingv RO/EN, mod contrast, reducere animații, sistem XP, misiuni live, comenzi generate dinamic și salvare locală a progresului.',xpTitle:'Progression loop',xpText:'Servește corect pentru XP. La fiecare nivel, jocul devine mai rapid și comenzile valorează mai mult.',a11yTitle:'Accessibility-first',a11yText:'Butoane mari, focus vizibil, feedback textual, contrast ridicat și suport pentru preferința reduced motion.',orders:'Comenzi',score:'Scor',combo:'Combo',level:'Nivel',lives:'Vieți',kitchen:'Bucătărie arcade',trayEmpty:'Tava este goală. Alege ingredientele pentru comanda selectată.',serve:'Servește comanda',clear:'Golește tava',badgeTitle:'Badge-uri & misiuni'},
+      en:{skip:'Skip to game',theme:'Contrast',motion:'Reduce motion',classic:'Classic version',kicker:'May 2026 CodePen Challenge · Enhanced',titleA:"Surfin'",titleB:'Quest',lead:'Serve beach orders, build combos, use power-ups and unlock badges in a premium, accessible, mobile-first arcade experience.',start:'▶ Start quest',reset:'Reset progress',best:'Best score',games:'Games played',badges:'Badges',whyTitle:'What is new in Enhanced?',whyText:'Bilingual RO/EN UI, contrast mode, reduced motion, XP system, live missions, dynamic orders and local progress saving.',xpTitle:'Progression loop',xpText:'Serve correctly for XP. Every level makes the game faster and orders more valuable.',a11yTitle:'Accessibility-first',a11yText:'Large buttons, visible focus, text feedback, high contrast and reduced-motion support.',orders:'Orders',score:'Score',combo:'Combo',level:'Level',lives:'Lives',kitchen:'Arcade kitchen',trayEmpty:'Your tray is empty. Pick ingredients for the selected order.',serve:'Serve order',clear:'Clear tray',badgeTitle:'Badges & missions'}
+    };
+
+    const items = [
+      ['burger','🍔','Burger',18],['fries','🍟','Fries',12],['surf','🌊','Surf Roll',22],['fish','🐟','Fish',20],['cola','🥤','Cola',10],
+      ['shake','🥛','Shake',16],['taco','🌮','Taco',18],['pizza','🍕','Pizza',21],['hotdog','🌭','Hot Dog',15],['wings','🍗','Wings',24]
+    ].map(([id,emoji,name,points])=>({id,emoji,name,points}));
+    const customers = ['🐦 Birdie','🏄 Surfer','🎸 Rocker','🕶 Cool Cat','🌴 Beachbum','🦜 Parrot','🐙 Octo','🌺 Flora'];
+    const names = ['Beach Combo','Surf Snack','Bird Special','Golden Wave','Neon Picnic','Boardwalk Pack','Tropical Rush','Premium Bite'];
+    const badges = [
+      {id:'first',icon:'🏅',name:'First Serve',desc:'Serve 1 order',test:s=>s.total>=1},
+      {id:'triple',icon:'🔥',name:'Triple Combo',desc:'Reach x3 combo',test:s=>s.bestCombo>=3},
+      {id:'ten',icon:'🍽️',name:'Service Pro',desc:'Serve 10 total orders',test:s=>s.total>=10},
+      {id:'score500',icon:'💎',name:'500 Club',desc:'Score 500+',test:s=>s.score>=500},
+      {id:'level4',icon:'🌊',name:'Wave Rider',desc:'Reach level 4',test:s=>s.level>=4},
+      {id:'power',icon:'⚡',name:'Power User',desc:'Use a power-up',test:s=>s.powerUsed>=1},
+      {id:'perfect',icon:'👑',name:'Perfect Tray',desc:'Serve 5 flawless',test:s=>s.flawless>=5},
+      {id:'legend',icon:'🚀',name:'Legend Run',desc:'Score 1500+',test:s=>s.score>=1500}
+    ];
+    const powerups = [
+      {id:'freeze',icon:'❄️',name:'Freeze',cost:120,desc:'+10s'},
+      {id:'double',icon:'💎',name:'Double',cost:160,desc:'Next +2x'},
+      {id:'heal',icon:'💚',name:'Heal',cost:180,desc:'+1 life'},
+      {id:'clean',icon:'💥',name:'Clean',cost:220,desc:'Clear queue'}
+    ];
+
+    let lang = localStorage.getItem('sbq_lang') || 'ro';
+    let selectedTheme = localStorage.getItem('sbq_theme') || 'dark';
+    let motion = localStorage.getItem('sbq_motion') || (matchMedia('(prefers-reduced-motion: reduce)').matches ? 'off' : 'on');
+    let save = readSave();
+    let state = freshState();
+    let timerId = null;
+    let orderId = 1;
+    let selectedOrderId = null;
+
+    function readSave(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'{"best":0,"games":0,"badges":[]}')}catch{return {best:0,games:0,badges:[]}}}
+    function writeSave(){localStorage.setItem(STORE_KEY,JSON.stringify(save))}
+    function freshState(){return {running:false,score:0,combo:1,bestCombo:1,level:1,lives:3,xp:0,time:60,orders:[],tray:[],total:0,flawless:0,powerUsed:0,double:false}}
+    function t(key){return i18n[lang][key] || i18n.ro[key] || key}
+    function applyPrefs(){root.dataset.theme=selectedTheme;root.dataset.motion=motion;$('#langBtn').textContent=lang==='ro'?'EN':'RO';$$('[data-i18n]').forEach(el=>{el.textContent=t(el.dataset.i18n)});$('#themeBtn').textContent=selectedTheme==='contrast'?(lang==='ro'?'Dark':'Dark'):(selectedTheme==='dark'?'Light':'Contrast');$('#motionBtn').textContent=motion==='on'?t('motion'):(lang==='ro'?'Mișcare ON':'Motion ON');renderAll()}
+    function toast(msg,type='good'){const el=document.createElement('div');el.className='toast '+type;el.textContent=msg;$('#toasts').append(el);setTimeout(()=>el.remove(),2600)}
+    function rand(n){return Math.floor(Math.random()*n)}
+    function makeOrder(){const count=2+Math.min(3,rand(2+Math.floor(state.level/2)));const recipe=[];while(recipe.length<count){recipe.push(items[rand(items.length)].id)}const points=recipe.reduce((s,id)=>s+items.find(i=>i.id===id).points,0)+state.level*10;return {id:orderId++,name:names[rand(names.length)],customer:customers[rand(customers.length)],recipe,points,time:Math.max(14,34-state.level*2),max:Math.max(14,34-state.level*2)}}
+    function startGame(){clearInterval(timerId);state=freshState();orderId=1;selectedOrderId=null;for(let i=0;i<3;i++)state.orders.push(makeOrder());state.running=true;save.games++;writeSave();timerId=setInterval(tick,1000);toast(lang==='ro'?'Quest pornit. Selectează o comandă!':'Quest started. Select an order!');renderAll();$('#game').scrollIntoView({behavior:motion==='on'?'smooth':'auto',block:'start'})}
+    function tick(){if(!state.running)return;state.time--;state.orders.forEach(o=>o.time--);const expired=state.orders.filter(o=>o.time<=0).length;if(expired){state.orders=state.orders.filter(o=>o.time>0);state.lives=Math.max(0,state.lives-expired);state.combo=1;toast(lang==='ro'?`Ai pierdut ${expired} comandă/comenzi.`:`${expired} order(s) expired.`,'bad')}
+      while(state.orders.length<Math.min(6,3+state.level)) state.orders.push(makeOrder());
+      if(state.time<=0||state.lives<=0) endGame();
+      renderAll();
+    }
+    function endGame(){state.running=false;clearInterval(timerId);save.best=Math.max(save.best,state.score);checkBadges();writeSave();toast(lang==='ro'?`Run finalizat: ${state.score} puncte.`:`Run complete: ${state.score} points.`);renderAll()}
+    function addItem(id){if(!state.running){toast(lang==='ro'?'Apasă Start Quest mai întâi.':'Press Start Quest first.','bad');return}state.tray.push(id);renderTray()}
+    function clearTray(){state.tray=[];renderTray()}
+    function sameRecipe(a,b){return a.length===b.length && [...a].sort().join('|')===[...b].sort().join('|')}
+    function serve(){if(!state.running)return toast(lang==='ro'?'Jocul nu este pornit.':'Game is not running.','bad');const order=state.orders.find(o=>o.id===selectedOrderId)||state.orders[0];if(!order)return;const ok=sameRecipe(state.tray,order.recipe);if(!ok){state.combo=1;state.lives=Math.max(0,state.lives-1);state.tray=[];toast(lang==='ro'?'Rețeta nu se potrivește.':'Recipe mismatch.','bad');if(state.lives<=0)endGame();renderAll();return}
+      const multiplier=state.double?2:1;const gain=Math.round(order.points*state.combo*multiplier);state.score+=gain;state.xp+=30+order.recipe.length*8;state.total++;state.flawless++;state.bestCombo=Math.max(state.bestCombo,state.combo);state.combo=Math.min(12,state.combo+1);state.double=false;state.orders=state.orders.filter(o=>o.id!==order.id);state.tray=[];selectedOrderId=null;if(state.xp>=100){state.xp-=100;state.level++;state.time+=8;toast(lang==='ro'?`Nivel ${state.level}! +8 secunde`:`Level ${state.level}! +8 seconds`)}else{toast(`+${gain} XP`)}checkBadges();renderAll();}
+    function usePower(id){const p=powerups.find(x=>x.id===id);if(!state.running||!p||state.score<p.cost)return;state.score-=p.cost;state.powerUsed++;if(id==='freeze')state.time+=10;if(id==='double')state.double=true;if(id==='heal')state.lives=Math.min(5,state.lives+1);if(id==='clean')state.orders=[];toast(`${p.icon} ${p.name}`);checkBadges();renderAll()}
+    function checkBadges(){let unlocked=false;badges.forEach(b=>{if(!save.badges.includes(b.id)&&b.test(state)){save.badges.push(b.id);unlocked=true;toast((lang==='ro'?'Badge deblocat: ':'Badge unlocked: ')+b.name)}});if(unlocked)writeSave()}
+    function renderKitchen(){const grid=$('#kitchenGrid');grid.innerHTML='';items.forEach(item=>{const btn=document.createElement('button');btn.className='item-card';btn.type='button';btn.innerHTML=`<span class="emoji" aria-hidden="true">${item.emoji}</span><span class="label">${item.name}</span>`;btn.setAttribute('aria-label',`Add ${item.name}`);btn.addEventListener('click',()=>addItem(item.id));grid.append(btn)})}
+    function renderOrders(){const list=$('#ordersList');list.innerHTML='';if(!state.orders.length){list.innerHTML=`<div class="mission-card"><p>${lang==='ro'?'Nicio comandă în coadă. Următoarea apare imediat.':'No orders in queue. The next one arrives soon.'}</p></div>`;return}state.orders.forEach(order=>{const btn=document.createElement('button');btn.type='button';btn.className='order-card '+(selectedOrderId===order.id?'selected ':'')+(order.time<8?'urgent':'');btn.addEventListener('click',()=>{selectedOrderId=order.id;renderOrders()});btn.innerHTML=`<div class="order-head"><div><div class="order-name">${order.name}</div><div class="order-customer">${order.customer}</div></div><div class="order-points">+${order.points}</div></div><div class="recipe">${order.recipe.map(id=>`<span>${items.find(i=>i.id===id).emoji}</span>`).join('')}</div><div class="timebar" aria-hidden="true"><span style="width:${Math.max(0,order.time/order.max*100)}%"></span></div><span class="sr-only">${Math.round(order.time)} seconds left</span>`;list.append(btn)})}
+    function renderTray(){const tray=$('#tray');tray.innerHTML='';tray.classList.toggle('empty',state.tray.length===0);if(!state.tray.length){tray.textContent=t('trayEmpty');return}state.tray.forEach((id,idx)=>{const item=items.find(i=>i.id===id);const span=document.createElement('button');span.type='button';span.className='tray-item';span.title='Remove';span.textContent=item.emoji;span.addEventListener('click',()=>{state.tray.splice(idx,1);renderTray()});tray.append(span)})}
+    function renderPowerups(){const wrap=$('#powerups');wrap.innerHTML='';powerups.forEach(p=>{const btn=document.createElement('button');btn.type='button';btn.className='power';btn.disabled=!state.running||state.score<p.cost;btn.innerHTML=`<span style="font-size:1.45rem">${p.icon}</span><strong>${p.name}</strong><span>${p.desc} · ${p.cost}</span>`;btn.addEventListener('click',()=>usePower(p.id));wrap.append(btn)})}
+    function renderBadges(){const grid=$('#badgesGrid');grid.innerHTML='';badges.forEach(b=>{const on=save.badges.includes(b.id);const card=document.createElement('div');card.className='badge '+(on?'unlocked':'');card.innerHTML=`<div class="icon">${b.icon}</div><strong>${b.name}</strong><span>${b.desc}</span>`;grid.append(card)});$('#badgesCount').textContent=`${save.badges.length}/${badges.length}`}
+    function renderStats(){save.best=Math.max(save.best,state.score);$('#score').textContent=state.score;$('#combo').textContent='x'+state.combo;$('#level').textContent=state.level;$('#lives').textContent='❤'.repeat(state.lives)||'—';$('#timer').textContent=state.time+'s';$('#xpMeter').style.width=state.xp+'%';$('#heroMeter').style.width=Math.min(100,save.badges.length/badges.length*100)+'%';$('#bestScore').textContent=save.best;$('#gamesPlayed').textContent=save.games;$('#phaseChip').textContent=state.running?(lang==='ro'?'LIVE':'LIVE'):(lang==='ro'?'Ready':'Ready');$('#missionText').textContent=state.running?`${state.total}/3 ${lang==='ro'?'comenzi servite':'orders served'}`:(lang==='ro'?'Apasă Start pentru o rundă nouă':'Press Start for a new run')}
+    function renderAll(){renderStats();renderOrders();renderTray();renderPowerups();renderBadges()}
+
+    $('#startBtn').addEventListener('click',startGame);
+    $('#serveBtn').addEventListener('click',serve);
+    $('#clearBtn').addEventListener('click',clearTray);
+    $('#resetBtn').addEventListener('click',()=>{if(confirm(lang==='ro'?'Resetezi progresul Enhanced?':'Reset Enhanced progress?')){localStorage.removeItem(STORE_KEY);save=readSave();state=freshState();renderAll();toast(lang==='ro'?'Progres resetat.':'Progress reset.')}});
+    $('#langBtn').addEventListener('click',()=>{lang=lang==='ro'?'en':'ro';localStorage.setItem('sbq_lang',lang);applyPrefs()});
+    $('#themeBtn').addEventListener('click',()=>{selectedTheme=selectedTheme==='dark'?'light':selectedTheme==='light'?'contrast':'dark';localStorage.setItem('sbq_theme',selectedTheme);applyPrefs()});
+    $('#motionBtn').addEventListener('click',()=>{motion=motion==='on'?'off':'on';localStorage.setItem('sbq_motion',motion);applyPrefs()});
+    window.addEventListener('keydown',e=>{if(e.key==='Enter'&&state.running)serve();if(e.key==='Escape')clearTray();});
+
+    renderKitchen();
+    applyPrefs();
+  </script>
+</body>
+</html>
